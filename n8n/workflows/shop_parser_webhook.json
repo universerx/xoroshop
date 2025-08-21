@@ -1,0 +1,51 @@
+{
+  "name": "Shop Parser Webhook -> Normalize -> Google Sheets",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "shop-parser",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [260, 300],
+      "id": "Webhook"
+    },
+    {
+      "parameters": {
+        "functionCode": "// Normalize incoming payload to a flat row\nconst item = items[0].json;\nconst priceNumber = (() => {\n  const p = String(item.price||'').replace(/[^0-9.,]/g,'').replace(',', '.');\n  const m = p.match(/([0-9]+(?:\.[0-9]+)?)/);\n  return m ? parseFloat(m[1]) : null;\n})();\nreturn [{ json: {\n  url: item.url || '',\n  title: item.title || '',\n  price: priceNumber,\n  images: (item.images||[]).join(' | '),\n  specs: JSON.stringify(item.specs||[])\n}}];"
+      },
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 2,
+      "position": [540, 300],
+      "id": "Normalize"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "sheetId": "YOUR_SHEET_ID",
+        "range": "Products!A:E",
+        "options": {
+          "valueInputMode": "RAW",
+          "keyRow": 1
+        }
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 6,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "Google Sheets OAuth2"
+        }
+      },
+      "position": [820, 300],
+      "id": "GoogleSheets"
+    }
+  ],
+  "connections": {
+    "Webhook": { "main": [ [ { "node": "Normalize", "type": "main", "index": 0 } ] ] },
+    "Normalize": { "main": [ [ { "node": "GoogleSheets", "type": "main", "index": 0 } ] ] }
+  }
+}
+

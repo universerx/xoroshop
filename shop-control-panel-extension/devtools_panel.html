@@ -1,0 +1,34 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Shop Parser DevTools</title>
+    <style>
+      body { font: 12px system-ui; padding: 8px; }
+      textarea { width: 100%; height: 120px; }
+      pre { background: #0f172a; color: #e5e7eb; padding: 8px; border-radius: 6px; max-height: 200px; overflow: auto; }
+      .row { display: flex; gap: 8px; align-items: center; }
+      .row input { flex: 1; }
+    </style>
+  </head>
+  <body>
+    <div class="row">
+      <input id="selector" placeholder="CSS selector to inspect" />
+      <button id="inspect">Run</button>
+    </div>
+    <pre id="out"></pre>
+    <script>
+      document.getElementById('inspect').addEventListener('click', () => {
+        const sel = document.getElementById('selector').value.trim();
+        if (!sel) return;
+        chrome.devtools.inspectedWindow.eval(
+          `(function(){ try { return Array.from(document.querySelectorAll(${JSON.stringify(sel)})).map(n=>({text:(n.textContent||'').trim(), html:n.outerHTML.slice(0,500)})); } catch(e){ return {error:String(e)} } })()`,
+          (res, err) => {
+            document.getElementById('out').textContent = JSON.stringify(res||err, null, 2);
+          }
+        );
+      });
+    </script>
+  </body>
+  </html>
+

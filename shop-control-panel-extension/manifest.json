@@ -1,0 +1,33 @@
+{
+  "manifest_version": 3,
+  "name": "Shop Control Panel",
+  "description": "Side panel and DevTools helper to parse product pages and send data to n8n/AI backend.",
+  "version": "0.1.0",
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "storage",
+    "tabs"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "side_panel": {
+    "default_path": "sidepanel.html"
+  },
+  "action": {
+    "default_title": "Shop Control Panel"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["contentScript.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "devtools_page": "devtools.html"
+}
+

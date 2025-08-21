@@ -1,0 +1,68 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Shop Control Panel</title>
+    <link rel="stylesheet" href="sidepanel.css" />
+  </head>
+  <body>
+    <div id="app">
+      <header>
+        <h1>Shop Control</h1>
+        <button id="open-settings">⚙️</button>
+      </header>
+
+      <section class="selectors">
+        <div class="row">
+          <label>Title</label>
+          <input id="sel-title" placeholder="CSS selector for product title" />
+          <button data-preview="sel-title">👁</button>
+        </div>
+        <div class="row">
+          <label>Price</label>
+          <input id="sel-price" placeholder="CSS selector for price" />
+          <button data-preview="sel-price">👁</button>
+        </div>
+        <div class="row">
+          <label>Images</label>
+          <input id="sel-images" placeholder="CSS selector for images" />
+          <button data-preview="sel-images">👁</button>
+        </div>
+        <div class="row">
+          <label>Specs</label>
+          <input id="sel-specs" placeholder="CSS selector for specification rows" />
+          <button data-preview="sel-specs">👁</button>
+        </div>
+      </section>
+
+      <section class="actions">
+        <button id="btn-parse">Parse page</button>
+        <button id="btn-send-n8n">Send to n8n</button>
+        <button id="btn-ai-complete">AI: fill missing specs</button>
+        <span id="status"></span>
+      </section>
+
+      <section class="preview">
+        <h3>Preview</h3>
+        <pre id="preview"></pre>
+      </section>
+    </div>
+
+    <dialog id="dlg-settings">
+      <form method="dialog">
+        <h3>Settings</h3>
+        <label>n8n Webhook URL <input id="cfg-n8n" /></label>
+        <label>AI API URL <input id="cfg-ai" /></label>
+        <label>aPanel API URL <input id="cfg-apanel" /></label>
+        <menu>
+          <button value="cancel">Cancel</button>
+          <button id="save-settings" value="default">Save</button>
+        </menu>
+      </form>
+    </dialog>
+
+    <script src="sidepanel.js"></script>
+  </body>
+  </html>
+
